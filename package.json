@@ -1,0 +1,50 @@
+{
+  "name": "electrode-hapi-compat",
+  "version": "1.0.0",
+  "description": "Electrode Hapi 16/17 utility",
+  "main": "index.js",
+  "scripts": {
+    "test": "clap check"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/electrode-io/electrode-hapi-compat.git"
+  },
+  "keywords": [
+    "electrode",
+    "hapi",
+    "plugin"
+  ],
+  "author": "Dat Vong <Dat.Vong@walmartlabs.com>",
+  "license": "Apache-2.0",
+  "dependencies": {},
+  "nyc": {
+    "all": true,
+    "reporter": [
+      "lcov",
+      "text",
+      "text-summary"
+    ],
+    "exclude": [
+      "coverage",
+      "*clap.js",
+      "gulpfile.js",
+      "dist",
+      "test"
+    ],
+    "check-coverage": true,
+    "statements": 100,
+    "branches": 100,
+    "functions": 100,
+    "lines": 100,
+    "cache": true
+  },
+  "devDependencies": {
+    "electrode-archetype-njs-module-dev": "^3.0.0",
+    "hapi": "^16.6.3",
+    "mock-require": "^3.0.2"
+  }
+}
