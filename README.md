@@ -1,4 +1,4 @@
-# Electorde Hapi Compatibility Utility
+# Electrode Hapi Compatibility Utility
 
 A utility function that detects the Hapi version and return the appropriate plugin function.
 
