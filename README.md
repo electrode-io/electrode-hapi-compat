@@ -23,6 +23,36 @@ module.exports = universalHapiPlugin(registers, pkg);
 
 Specify the Hapi 16 and Hapi 17 plugins. This utility reads the Hapi version and returns the appropriate register function.
 
+## Checking for Hapi 17
+
+```js
+const {isHapi17} = require("electrode-hapi-compat");
+
+if(isHapi17()) {
+// hapi 17
+} else {
+// hapi 16
+}
+```
+
+## Testing
+To test a module that uses this library, use the `_testSetHapi17()` function.
+
+```js
+const {_testSetHapi17} = require("electrode-hapi-compat");
+
+it("Test Hapi 17", () => {
+  _testSetHapi17(true);
+  delete require.cache["my-module-that-uses-hapi-compat"];
+  const module = require("my-module-that-uses-hapi-compat");
+  
+  // test hapi 17 module
+  module.isHapi17();    // true
+});
+```
+Note the function needs to be called before you import the library.  Also delete your require cache for that library.
+
+
 # Install
 
 ```bash
