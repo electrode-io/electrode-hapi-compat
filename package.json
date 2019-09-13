@@ -1,7 +1,7 @@
 {
   "name": "electrode-hapi-compat",
   "version": "1.0.0",
-  "description": "Electrode Hapi 16/17 utility",
+  "description": "Electrode Hapi 16/17/18 utility",
   "main": "index.js",
   "scripts": {
     "test": "clap check"
