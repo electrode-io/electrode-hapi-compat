@@ -35,6 +35,19 @@ if(isHapi17()) {
 }
 ```
 
+## Checking for Hapi 18
+
+```js
+// this is to identify if @hapi/hapi v18 and above
+const {isHapi18OrUp} = require("electrode-hapi-compat");
+
+if(isHapi18OrUp()) {
+// @hapi/hapi >= 18
+} else {
+// hapi 16/17
+}
+```
+
 ## Testing
 To test a module that uses this library, use the `_testSetHapi17()` function.
 
@@ -50,6 +63,8 @@ it("Test Hapi 17", () => {
   module.isHapi17();    // true
 });
 ```
+```_testSetHapi18()``` would do the same as above but for @hapi/hapi v18 and above
+
 Note the function needs to be called before you import the library.  Also delete your require cache for that library.
 
 
