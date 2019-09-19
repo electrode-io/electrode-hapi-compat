@@ -6,7 +6,7 @@ Hapi 17 changed the signature of Plugins. This utility provides a simple wrapper
 
 ## Export plugin for Hapi 16 or 17+
 
-If you have module that can export plugins for hapi 16 or 17+, you can let this module automatically determine which of your plugins to use depending on the version of Hapi detected using `universalHapiPlugin`.
+If you have module that can export plugins for hapi 16 or 17+, you can use the API `universalHapiPlugin` to let this module automatically determine which of your plugins to use depending on the version of Hapi detected.
 
 ```js
 const {universalHapiPlugin} = require("electrode-hapi-compat");
@@ -23,8 +23,6 @@ const pkg = {
 
 module.exports = universalHapiPlugin(registers, pkg);
 ```
-
-Specify the Hapi 16 and Hapi 17 plugins. This utility reads the Hapi version and returns the appropriate register function.
 
 ## Checking for Hapi 17 or Up
 
