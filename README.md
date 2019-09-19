@@ -2,17 +2,20 @@
 
 A utility function that detects the Hapi version and return the appropriate plugin function.
 
-Hapi 17 changed the signature of Plugins. This utility provides a simple wrapper for your plugin to support both Hapi 16 and Hapi 17.
+Hapi 17 changed the signature of Plugins. This utility provides a simple wrapper for your plugin to support both Hapi 16 and Hapi 17+.
 
-# Usage
+## Export plugin for Hapi 16 or 17+
 
-```
+If you have module that can export plugins for hapi 16 or 17+, you can let this module automatically determine which of your plugins to use depending on the version of Hapi detected using `universalHapiPlugin`.
+
+```js
 const {universalHapiPlugin} = require("electrode-hapi-compat");
 
 const registers = {
   hapi16: (server, options, next) => {...},
-  hapi17: (server, options) => {...}
+  hapi17OrUp: (server, options) => {...}
 };
+
 const pkg = {
   name: "MyPackage",
   version: "1.0.0"
@@ -23,58 +26,53 @@ module.exports = universalHapiPlugin(registers, pkg);
 
 Specify the Hapi 16 and Hapi 17 plugins. This utility reads the Hapi version and returns the appropriate register function.
 
-## Checking for Hapi 17
+## Checking for Hapi 17 or Up
 
 ```js
-const {isHapi17} = require("electrode-hapi-compat");
+const { isHapi17OrUp } = require("electrode-hapi-compat");
 
-if(isHapi17()) {
-// hapi 17
+if (isHapi17OrUp()) {
+  // hapi 17 or @hapi/hapi >= 18
 } else {
-// hapi 16
+  // hapi 16
 }
 ```
 
-## Checking for Hapi 18
+## Checking for Hapi 18 or Up
 
 ```js
 // this is to identify if @hapi/hapi v18 and above
-const {isHapi18OrUp} = require("electrode-hapi-compat");
+const { isHapi18OrUp } = require("electrode-hapi-compat");
 
-if(isHapi18OrUp()) {
-// @hapi/hapi >= 18
+if (isHapi18OrUp()) {
+  // @hapi/hapi >= 18
 } else {
-// hapi 16/17
+  // hapi 16/17
 }
 ```
 
-## Testing
-To test a module that uses this library, use the `_testSetHapi17()` function.
+## Manually Setting Version for Testing
+
+If you need to manually force a certain version of Hapi for testing etc,
+you can manually set the Hapi major version this module should use with the `hapiVersion` property:
 
 ```js
-const {_testSetHapi17} = require("electrode-hapi-compat");
+// Set to use Hapi major version 18
 
-it("Test Hapi 17", () => {
-  _testSetHapi17(true);
-  delete require.cache["my-module-that-uses-hapi-compat"];
-  const module = require("my-module-that-uses-hapi-compat");
-  
-  // test hapi 17 module
-  module.isHapi17();    // true
-});
+require("electrode-hapi-compat").hapiVersion = 18;
+
+// Get Hapi major version
+
+const hapiVersion = require("electrode-hapi-compat").hapiVersion;
 ```
-```_testSetHapi18()``` would do the same as above but for @hapi/hapi v18 and above
 
-Note the function needs to be called before you import the library.  Also delete your require cache for that library.
-
-
-# Install
+## Install
 
 ```bash
 $ npm install --save electrode-hapi-compat
 ```
 
-# Contribute
+## Contribute
 
 1. Clone this repo
 2. Make updates

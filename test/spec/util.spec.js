@@ -2,6 +2,7 @@
 
 const hapi = require("hapi");
 const mockRequire = require("mock-require");
+const compat = require("../..");
 
 describe("Util", () => {
   let index;
@@ -40,6 +41,7 @@ describe("Util", () => {
     index = require("../../lib/util");
     expect(index.isHapi17()).false;
   });
+
   it("test allow tests to set isHapi17 flag", () => {
     index = require("../../lib/util");
     expect(index.isHapi17()).false;
@@ -57,6 +59,7 @@ describe("Util", () => {
     index = require("../../lib/util");
     expect(index.isHapi18OrUp()).false;
   });
+
   it("test allow tests to set isHapi18 flag", () => {
     index = require("../../lib/util");
     expect(index.isHapi18OrUp()).false;
@@ -120,5 +123,41 @@ describe("Util", () => {
     const plugin = index.universalHapiPlugin(registers, pkg);
     expect(plugin.pkg).equal(pkg);
     expect(plugin.register).equal(registers.hapi17OrUp);
+  });
+
+  it("_testSetHapi17 should set version to 17 for true", () => {
+    compat.hapiVersion = 18;
+    compat._testSetHapi17(true);
+    expect(compat.hapiVersion).equals(17);
+  });
+
+  it("_testSetHapi17 should set version to 16 for 17 and false", () => {
+    compat.hapiVersion = 17;
+    compat._testSetHapi17(false);
+    expect(compat.hapiVersion).equals(16);
+  });
+
+  it("_testSetHapi17 should do nothing for version !== 17 and false", () => {
+    compat.hapiVersion = 18;
+    compat._testSetHapi17(false);
+    expect(compat.hapiVersion).equals(18);
+  });
+
+  it("_testSetHapi18 should set version to 18 for true", () => {
+    compat.hapiVersion = 16;
+    compat._testSetHapi18(true);
+    expect(compat.hapiVersion).equals(18);
+  });
+
+  it("_testSetHapi18 should set version to 17 for 18 and false", () => {
+    compat.hapiVersion = 18;
+    compat._testSetHapi18(false);
+    expect(compat.hapiVersion).equals(17);
+  });
+
+  it("_testSetHapi18 should do nothing for version !== 18 and false", () => {
+    compat.hapiVersion = 16;
+    compat._testSetHapi18(false);
+    expect(compat.hapiVersion).equals(16);
   });
 });
