@@ -1,3 +1,7 @@
+## [v1.3.1] 01-02-2020
+
+- Correct publish error
+
 ## [v1.3.0] 01-02-2020
 
 - Support for fastify.
