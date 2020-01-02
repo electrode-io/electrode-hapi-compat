@@ -49,6 +49,13 @@ describe("Util", () => {
     expect(index.isHapi17()).true;
   });
 
+  it("test allow tests to set isFastify flag", () => {
+    index = require("../..");
+    expect(index.isFastify()).false;
+    index._testSetFastify(true);
+    expect(index.isFastify()).true;
+  });
+
   it("test is hapi 18", () => {
     mockRequire("@hapi/hapi/package", { version: "18.3.2" });
     index = require("../..");
@@ -58,6 +65,17 @@ describe("Util", () => {
   it("test is not hapi 18", () => {
     index = require("../..");
     expect(index.isHapi18OrUp()).false;
+  });
+
+  it("test is not fastify", () => {
+    index = require("../..");
+    expect(index.isFastify()).false;
+  });
+
+  it("test is fastify", () => {
+    mockRequire("fastify/package", {});
+    index = require("../..");
+    expect(index.isFastify()).true;
   });
 
   it("test allow tests to set isHapi18 flag", () => {
@@ -72,6 +90,31 @@ describe("Util", () => {
     mockRequire("hapi/package", null);
     index = require("../..");
     expect(index.isHapi17()).false;
+  });
+
+  it("test universalHapiPlugin on Fastify", () => {
+    mockRequire("fastify/package", {});
+    index = require("../..");
+    const registers = {
+      hapi16: () => {},
+      hapi17: () => {},
+      fastify: () => {}
+    };
+    const pkg = { name: "Green" };
+    const plugin = index.universalHapiPlugin(registers, pkg);
+    expect(plugin).equal(registers.fastify);
+  });
+
+  it("test universalHapiPlugin when no Fastify version", () => {
+    mockRequire("fastify/package", {});
+    index = require("../..");
+    const registers = {
+      hapi16: () => {},
+      hapi17: () => {}
+    };
+    const pkg = { name: "Green" };
+    const plugin = () => index.universalHapiPlugin(registers, pkg);
+    expect(plugin).to.throw("Plugin is not compatible with fastify");
   });
 
   it("test universalHapiPlugin on Hapi 16", () => {
