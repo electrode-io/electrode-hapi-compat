@@ -84,6 +84,14 @@ To run tests
 $ npm run test
 ```
 
+## Publishing
+
+1. Run `npm version <version-type>` to bump the version.
+2. Update the `CHANGELOG.md`
+3. Make sure your npmrc is pointing to external npm.
+4. Run `npm publish` (make sure you have permission to github and npm).
+5. Run `git push origin master --tags` to commit changes.
+
 Built with :heart: by [Team Electrode](https://github.com/orgs/electrode-io/people) @WalmartLabs.
 
 [hapi]: https://www.npmjs.com/package/hapi
