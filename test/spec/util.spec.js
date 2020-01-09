@@ -105,7 +105,7 @@ describe("Util", () => {
     expect(plugin).equal(registers.fastify);
   });
 
-  it("test universalHapiPlugin when no Fastify version", () => {
+  it("test universalHapiPlugin when no Fastify version", async () => {
     mockRequire("fastify/package", {});
     index = require("../..");
     const registers = {
@@ -113,8 +113,13 @@ describe("Util", () => {
       hapi17: () => {}
     };
     const pkg = { name: "Green" };
-    const plugin = () => index.universalHapiPlugin(registers, pkg);
-    expect(plugin).to.throw("Plugin is not compatible with fastify");
+    const plugin = index.universalHapiPlugin(registers, pkg);
+    try {
+      await plugin();
+      throw new Error("Expected plugin to throw on registration");
+    } catch (e) {
+      expect(e.message).to.equal("Plugin is not compatible with fastify");
+    }
   });
 
   it("test universalHapiPlugin on Hapi 16", () => {
