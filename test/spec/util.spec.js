@@ -205,7 +205,7 @@ describe("Util", () => {
     expect(compat.hapiVersion).equals(17);
   });
 
-  it("_testSetHapi17 should set version to 17 for 18 and false on fresh require", () => {
+  it("_testSetHapi18 should set version to 17 for 18 and false on fresh require", () => {
     mockRequire("@hapi/hapi/package", { version: "18.3.2" });
     index = require("../..");
     index._testSetHapi18(false);
