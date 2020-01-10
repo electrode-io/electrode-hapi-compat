@@ -1,3 +1,8 @@
+## [v1.3.2] 01-10-2020
+
+- Fix `_testSet` API edge case
+- Instead of failing eagerly, fail on registration for fastify-incompatible plugins
+
 ## [v1.3.1] 01-02-2020
 
 - Correct publish error
