@@ -180,6 +180,13 @@ describe("Util", () => {
     expect(compat.hapiVersion).equals(16);
   });
 
+  it("_testSetHapi17 should set version to 16 for 17 and false on fresh require", () => {
+    mockRequire("hapi/package", { version: "17.8.5" });
+    index = require("../..");
+    index._testSetHapi17(false);
+    expect(index.hapiVersion).equals(16);
+  });
+
   it("_testSetHapi17 should do nothing for version !== 17 and false", () => {
     compat.hapiVersion = 18;
     compat._testSetHapi17(false);
@@ -196,6 +203,13 @@ describe("Util", () => {
     compat.hapiVersion = 18;
     compat._testSetHapi18(false);
     expect(compat.hapiVersion).equals(17);
+  });
+
+  it("_testSetHapi17 should set version to 16 for 17 and false on fresh require", () => {
+    mockRequire("@hapi/hapi/package", { version: "18.3.2" });
+    index = require("../..");
+    index._testSetHapi18(false);
+    expect(index.hapiVersion).equals(17);
   });
 
   it("_testSetHapi18 should do nothing for version !== 18 and false", () => {
