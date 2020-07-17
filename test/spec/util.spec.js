@@ -4,9 +4,16 @@ const hapi = require("hapi");
 const mockRequire = require("mock-require");
 const compat = require("../..");
 
+const utils = require("../../lib/utils");
+
 describe("Util", () => {
   let index;
   let hapiServer;
+
+  const origXRequire = utils.xrequire;
+  const origTryResole = utils.tryResolve;
+  const origShowWarning = utils.showWarning;
+  utils.showWarning = () => {};
 
   beforeEach(() => {
     hapiServer = new hapi.Server();
@@ -21,12 +28,15 @@ describe("Util", () => {
   });
 
   afterEach(() => {
+    utils.tryResolve = origTryResole;
+    utils.xrequire = origXRequire;
     hapiServer.stop();
     delete require.cache[require.resolve("../..")];
     mockRequire.stopAll();
   });
 
   it("test index", () => {
+    origShowWarning("for coverage");
     index = require("../..");
     expect(index.isHapi17()).false;
   });
@@ -58,6 +68,7 @@ describe("Util", () => {
 
   it("test is hapi 18", () => {
     mockRequire("@hapi/hapi/package", { version: "18.3.2" });
+    utils.tryResolve = () => "@hapi/hapi/package";
     index = require("../..");
     expect(index.isHapi18OrUp()).true;
   });
@@ -74,6 +85,7 @@ describe("Util", () => {
 
   it("test is fastify", () => {
     mockRequire("fastify/package", {});
+    utils.tryResolve = () => "fastify/package";
     index = require("../..");
     expect(index.isFastify()).true;
   });
@@ -88,12 +100,14 @@ describe("Util", () => {
   it("test no hapi, defaults hapi 16", () => {
     //mockRequire("@hapi/hapi/package", null);
     mockRequire("hapi/package", null);
+    utils.tryResolve = () => null;
     index = require("../..");
     expect(index.isHapi17()).false;
   });
 
   it("test universalHapiPlugin on Fastify", () => {
     mockRequire("fastify/package", {});
+    utils.tryResolve = () => "fastify/package";
     index = require("../..");
     const registers = {
       hapi16: () => {},
@@ -107,6 +121,7 @@ describe("Util", () => {
 
   it("test universalHapiPlugin when no Fastify version", async () => {
     mockRequire("fastify/package", {});
+    utils.tryResolve = () => "fastify/package";
     index = require("../..");
     const registers = {
       hapi16: () => {},
@@ -212,6 +227,7 @@ describe("Util", () => {
 
   it("_testSetHapi18 should set version to 17 for 18 and false on fresh require", () => {
     mockRequire("@hapi/hapi/package", { version: "18.3.2" });
+    utils.tryResolve = () => "@hapi/hapi/package";
     index = require("../..");
     index._testSetHapi18(false);
     expect(index.hapiVersion).equals(17);
@@ -221,5 +237,25 @@ describe("Util", () => {
     compat.hapiVersion = 16;
     compat._testSetHapi18(false);
     expect(compat.hapiVersion).equals(16);
+  });
+
+  describe("isPathAlignedToMe", function () {
+    it("should return true if both path align", () => {
+      expect(
+        compat.isPathAlignedToMe(
+          "/a/b/c/node_modules/x/package",
+          "/a/b/c/node_modules/y/blah"
+        )
+      ).equal(true);
+    });
+
+    it("should detect path is above me", () => {
+      const aligned = compat.isPathAlignedToMe(
+        "/a/b/node_modules/x/package",
+        "/a/b/c/node_modules/y/blah"
+      );
+      expect(aligned).to.not.equal(true);
+      expect(aligned.reason).contains("above app's dir");
+    });
   });
 });
