@@ -1,6 +1,6 @@
 {
   "name": "electrode-hapi-compat",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Electrode Hapi 16/17/18 utility",
   "main": "lib/index.js",
   "scripts": {
